@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import keyboardHero from "@/assets/keyboard-hero.png";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -15,12 +16,16 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-          <Button size="lg" className="w-full sm:w-auto">
-            Start Typing <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button size="lg" variant="outline" className="w-full sm:w-auto">
-            Learn More
-          </Button>
+          <Link to="/login">
+            <Button size="lg" className="w-full sm:w-auto">
+              Start Typing <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+          <a href="#features">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              Learn More
+            </Button>
+          </a>
         </div>
 
         <div className="max-w-4xl mx-auto mb-12 animate-fade-up" style={{ animationDelay: "0.3s" }}>

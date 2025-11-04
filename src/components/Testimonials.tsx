@@ -3,12 +3,12 @@ import { Star } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
 const testimonials = [
-  { name: "Jane Doe", initials: "JD" },
-  { name: "Jane Doe", initials: "JD" },
-  { name: "Jane Doe", initials: "JD" },
-  { name: "Jane Doe", initials: "JD" },
-  { name: "Jane Doe", initials: "JD" },
-  { name: "Jane Doe", initials: "JD" },
+  { name: "Hirwa Ivan", initials: "HI" },
+  { name: "Iradukunda Sedrick", initials: "IS" },
+  { name: "Adeline Iradukunda", initials: "AI" },
+  { name: "Mugisha Patrick", initials: "MP" },
+  { name: "Uwase Grace", initials: "UG" },
+  { name: "Niyonzima Eric", initials: "NE" },
 ];
 
 const Testimonials = () => {

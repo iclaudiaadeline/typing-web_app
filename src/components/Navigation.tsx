@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Keyboard } from "lucide-react";
+import Logo from "./Logo";
 
 const Navigation = () => {
   return (
@@ -8,7 +8,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <Keyboard className="h-8 w-8 text-primary" />
+            <Logo className="h-8 w-8" />
             <span className="text-xl font-bold text-foreground">Typing Master</span>
           </Link>
           
@@ -31,9 +31,14 @@ const Navigation = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Link to="/signup">
+            <Link to="/login">
               <Button variant="outline" size="sm">
                 Sign In
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button size="sm">
+                Sign Up
               </Button>
             </Link>
           </div>
