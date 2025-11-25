@@ -1,14 +1,126 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Keyboard } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const API_URL = "http://localhost:5000/api";
 
 const SignUp = () => {
   const [activeTab, setActiveTab] = useState("personal");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Personal signup state
+  const [personalData, setPersonalData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  // School signup state
+  const [schoolData, setSchoolData] = useState({
+    schoolName: "",
+    domain: "",
+    adminFirstName: "",
+    adminLastName: "",
+    adminEmail: "",
+    adminPassword: "",
+  });
+
+  const handlePersonalSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...personalData,
+          role: "student",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Account Created!",
+          description: "Please log in with your credentials.",
+        });
+        navigate("/login");
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: data.message || "Could not create account",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Connection Error",
+        description: "Could not connect to server. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSchoolSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_URL}/schools/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: schoolData.schoolName,
+          domain: schoolData.domain,
+          adminFirstName: schoolData.adminFirstName,
+          adminLastName: schoolData.adminLastName,
+          adminEmail: schoolData.adminEmail,
+          adminPassword: schoolData.adminPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "School Account Created!",
+          description: "Your school has been registered. Please log in.",
+        });
+        navigate("/login");
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: data.message || "Could not create school account",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Connection Error",
+        description: "Could not connect to server. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
@@ -64,30 +176,56 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <form className="space-y-4">
+                <form onSubmit={handlePersonalSignup} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="Enter first name" />
+                      <Input 
+                        id="firstName" 
+                        placeholder="Enter first name"
+                        value={personalData.firstName}
+                        onChange={(e) => setPersonalData({...personalData, firstName: e.target.value})}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Enter last name" />
+                      <Input 
+                        id="lastName" 
+                        placeholder="Enter last name"
+                        value={personalData.lastName}
+                        onChange={(e) => setPersonalData({...personalData, lastName: e.target.value})}
+                        required
+                      />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="Enter your email" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="Enter your email"
+                      value={personalData.email}
+                      onChange={(e) => setPersonalData({...personalData, email: e.target.value})}
+                      required
+                    />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" placeholder="Create a password" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      placeholder="Create a password"
+                      value={personalData.password}
+                      onChange={(e) => setPersonalData({...personalData, password: e.target.value})}
+                      required
+                    />
                   </div>
 
-                  <Button type="submit" className="w-full">
-                    Create an Account
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Creating Account..." : "Create an Account"}
                   </Button>
                 </form>
               </TabsContent>
@@ -124,41 +262,79 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <form className="space-y-4">
+                <form onSubmit={handleSchoolSignup} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="schoolName">School Name</Label>
-                      <Input id="schoolName" placeholder="Enter school name" />
+                      <Input 
+                        id="schoolName" 
+                        placeholder="Enter school name"
+                        value={schoolData.schoolName}
+                        onChange={(e) => setSchoolData({...schoolData, schoolName: e.target.value})}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="schoolDomain">School Domain</Label>
-                      <Input id="schoolDomain" placeholder="Enter school domain" />
+                      <Input 
+                        id="schoolDomain" 
+                        placeholder="Enter school domain"
+                        value={schoolData.domain}
+                        onChange={(e) => setSchoolData({...schoolData, domain: e.target.value})}
+                        required
+                      />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="adminEmail">Admin Email</Label>
-                    <Input id="adminEmail" type="email" placeholder="Enter admin email" />
+                    <Input 
+                      id="adminEmail" 
+                      type="email" 
+                      placeholder="Enter admin email"
+                      value={schoolData.adminEmail}
+                      onChange={(e) => setSchoolData({...schoolData, adminEmail: e.target.value})}
+                      required
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="adminFirstName">First Name</Label>
-                      <Input id="adminFirstName" placeholder="Enter first name" />
+                      <Input 
+                        id="adminFirstName" 
+                        placeholder="Enter first name"
+                        value={schoolData.adminFirstName}
+                        onChange={(e) => setSchoolData({...schoolData, adminFirstName: e.target.value})}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="adminLastName">Last Name</Label>
-                      <Input id="adminLastName" placeholder="Enter last name" />
+                      <Input 
+                        id="adminLastName" 
+                        placeholder="Enter last name"
+                        value={schoolData.adminLastName}
+                        onChange={(e) => setSchoolData({...schoolData, adminLastName: e.target.value})}
+                        required
+                      />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="adminPassword">Password</Label>
-                    <Input id="adminPassword" type="password" placeholder="Create a password" />
+                    <Input 
+                      id="adminPassword" 
+                      type="password" 
+                      placeholder="Create a password"
+                      value={schoolData.adminPassword}
+                      onChange={(e) => setSchoolData({...schoolData, adminPassword: e.target.value})}
+                      required
+                    />
                   </div>
 
-                  <Button type="submit" className="w-full">
-                    Create an Account
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Creating Account..." : "Create School Account"}
                   </Button>
                 </form>
               </TabsContent>

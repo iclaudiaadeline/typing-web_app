@@ -12,6 +12,10 @@ import Classes from "./pages/Classes";
 import Students from "./pages/Students";
 import Settings from "./pages/Settings";
 import TypingPractice from "./pages/TypingPractice";
+import Achievements from "./pages/Achievements";
+import Leaderboard from "./pages/Leaderboard";
+import Certificates from "./pages/Certificates";
+import VoiceTyping from "./pages/VoiceTyping";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +36,10 @@ const App = () => (
           <Route path="/dashboard/students" element={<Students />} />
           <Route path="/dashboard/settings" element={<Settings />} />
           <Route path="/dashboard/practice" element={<TypingPractice />} />
+          <Route path="/dashboard/achievements" element={<Achievements />} />
+          <Route path="/dashboard/leaderboard" element={<Leaderboard />} />
+          <Route path="/dashboard/certificates" element={<Certificates />} />
+          <Route path="/dashboard/voice" element={<VoiceTyping />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

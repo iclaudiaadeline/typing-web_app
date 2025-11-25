@@ -9,7 +9,10 @@ import {
   Menu, 
   X,
   LogOut,
-  Keyboard
+  Keyboard,
+  Trophy,
+  Award,
+  Mic
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -45,9 +48,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const navItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+    { icon: Keyboard, label: "Practice", path: "/dashboard/practice" },
     { icon: FileText, label: "Assignments", path: "/dashboard/assignments" },
     { icon: GraduationCap, label: "Classes", path: "/dashboard/classes" },
     { icon: Users, label: "Students", path: "/dashboard/students" },
+    { icon: Trophy, label: "Leaderboard", path: "/dashboard/leaderboard" },
+    { icon: Award, label: "Achievements", path: "/dashboard/achievements" },
+    { icon: Award, label: "Certificates", path: "/dashboard/certificates" },
+    { icon: Mic, label: "Voice Typing", path: "/dashboard/voice" },
     { icon: Settings, label: "Settings", path: "/dashboard/settings" },
   ];
 
