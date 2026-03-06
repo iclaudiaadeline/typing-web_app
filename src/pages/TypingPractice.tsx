@@ -20,13 +20,15 @@ const TypingPractice = () => {
   const [errors, setErrors] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
 
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [navigate]);
+  // Don't redirect if not authenticated - allow public access
+  // useEffect(() => {
+  //   const isAuthenticated = localStorage.getItem("isAuthenticated");
+  //   if (!isAuthenticated) {
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
 
   useEffect(() => {
     // Auto-focus on the input
@@ -92,22 +94,22 @@ const TypingPractice = () => {
   const progress = (currentIndex / text.length) * 100;
   const currentKey = text[currentIndex] || "";
 
-  return (
-    <DashboardLayout>
-      <div className="space-y-6 max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Typing Practice</h1>
-            <p className="text-muted-foreground mt-1">
-              Improve your typing speed and accuracy
-            </p>
-          </div>
-          <Button variant="outline" onClick={handleReset}>
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
+  // Conditionally wrap with DashboardLayout if authenticated
+  const content = (
+    <div className="space-y-6 max-w-6xl mx-auto p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Typing Practice</h1>
+          <p className="text-muted-foreground mt-1">
+            Improve your typing speed and accuracy
+          </p>
         </div>
+        <Button variant="outline" onClick={handleReset}>
+          <RotateCcw className="h-4 w-4 mr-2" />
+          Reset
+        </Button>
+      </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -208,7 +210,15 @@ const TypingPractice = () => {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+  );
+
+  // Return with or without DashboardLayout based on authentication
+  return isAuthenticated ? (
+    <DashboardLayout>{content}</DashboardLayout>
+  ) : (
+    <div className="min-h-screen bg-background">
+      {content}
+    </div>
   );
 };
 

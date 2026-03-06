@@ -13,6 +13,7 @@ const VoiceTyping = () => {
   const [isPremium] = useState(true); // Set to true to test premium features
   const [transcription, setTranscription] = useState("");
   const [recognition, setRecognition] = useState<any>(null);
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
 
   const mockText = "The quick brown fox jumps over the lazy dog. Practice makes perfect when learning to type efficiently.";
 
@@ -144,10 +145,9 @@ const VoiceTyping = () => {
     return Math.round((correctWords / maxLength) * 100);
   };
 
-  return (
-    <DashboardLayout>
-      <div className="p-6 space-y-6">
-        {/* Header */}
+  const content = (
+    <div className="p-6 space-y-6">
+      {/* Header */}
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -389,7 +389,15 @@ const VoiceTyping = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
+  );
+
+  // Return with or without DashboardLayout based on authentication
+  return isAuthenticated ? (
+    <DashboardLayout>{content}</DashboardLayout>
+  ) : (
+    <div className="min-h-screen bg-background">
+      {content}
+    </div>
   );
 };
 

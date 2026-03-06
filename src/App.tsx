@@ -30,6 +30,12 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          
+          {/* Public Typing and Voice Pages */}
+          <Route path="/typing" element={<TypingPractice />} />
+          <Route path="/voice" element={<VoiceTyping />} />
+          
+          {/* Dashboard Routes (Protected) */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/assignments" element={<Assignments />} />
           <Route path="/dashboard/classes" element={<Classes />} />
@@ -40,6 +46,7 @@ const App = () => (
           <Route path="/dashboard/leaderboard" element={<Leaderboard />} />
           <Route path="/dashboard/certificates" element={<Certificates />} />
           <Route path="/dashboard/voice" element={<VoiceTyping />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
